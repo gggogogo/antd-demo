@@ -51,6 +51,7 @@ const user = {
           const result = response.result
           if (result.role && result.role.permissions.length > 0) {
             const role = result.role
+            // 生成一个permissionList方便之后生成路由时进行比较
             role.permissionList = role.permissions.map(permission => { return permission.permissionId })
             commit('SET_ROLES', result.role)
             commit('SET_INFO', result)
