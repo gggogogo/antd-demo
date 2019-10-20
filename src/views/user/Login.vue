@@ -4,7 +4,7 @@
       <a-form-item>
         <a-input
           v-decorator="[
-          'userName',
+          'username',
           { rules: [{ required: true, message: 'Please input your username!' }] }
         ]"
           placeholder="Username"
@@ -43,6 +43,8 @@
 </template>
 
 <script>
+import md5 from "md5";
+import { mapActions } from "vuex";
 export default {
   props: {},
   data() {
@@ -56,13 +58,40 @@ export default {
   mounted() {},
   watch: {},
   methods: {
+    ...mapActions(["Login", "Logout"]),
     handleSubmit(e) {
       e.preventDefault();
+      const { Login } = this;
       this.form.validateFields((err, values) => {
         if (!err) {
           console.log("Received values of form: ", values);
+          let { username, password } = values;
+          password = md5(password);
+          Login({ username, password }).then(res => this.loginSuccess(res));
         }
       });
+    },
+    loginSuccess(res) {
+      console.log(res);
+      // check res.homePage define, set $router.push name res.homePage
+      // Why not enter onComplete
+      /*
+      this.$router.push({ name: 'analysis' }, () => {
+        console.log('onComplete')
+        this.$notification.success({
+          message: '欢迎',
+          description: `${timeFix()}，欢迎回来`
+        })
+      })
+      */
+      this.$router.push({ path: "/" });
+      // 延迟 1 秒显示欢迎信息
+      setTimeout(() => {
+        this.$notification.success({
+          message: "欢迎",
+          description: `欢迎回来`
+        });
+      }, 1000);
     }
   },
   components: {}

@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { login, getInfo, logout } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 
@@ -10,7 +11,7 @@ const user = {
     roles: [],
     info: {}
   },
-  mutation: {
+  mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token
     },
@@ -34,7 +35,7 @@ const user = {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
           const result = response.result
-          vue.ls.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
+          Vue.ls.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
           commit('SET_TOKEN', result.token)
           resolve()
         }).catch(error => {
@@ -50,6 +51,9 @@ const user = {
           const result = response.result
           if (result.role && result.role.permissions.length > 0) {
             const role = result.role
+            role.permissionList = role.permissions.map(permission => { return permission.permissionId })
+            commit('SET_ROLES', result.role)
+            commit('SET_INFO', result)
           }
           resolve(response)
         }).catch(error => {

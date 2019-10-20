@@ -1,5 +1,11 @@
 <template>
-  <div>UserLayout</div>
+  <div>
+    <div class="container">
+      <div class="top">UserLayout</div>
+      <router-view />>
+      <div class="footer">this is a footer</div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -17,5 +23,6 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
+
 </style>

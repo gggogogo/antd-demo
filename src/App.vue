@@ -8,9 +8,7 @@
 export default {
   name: "app",
   components: {},
-  created() {
-    console.log(this.route);
-  }
+  created() {}
 };
 </script>
 
